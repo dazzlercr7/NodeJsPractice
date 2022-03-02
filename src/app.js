@@ -17,9 +17,23 @@
 //   .listen(PORT);
 
 const express = require("express"); //returns an handler function in variable
-
+//import express from "express" -------ES6 style of writing
 const app = express(); //executing handler function
+// import userRouter from "../api/routes/user.js" -------ES6 style of writing
 const userRouter = require("../api/routes/user.js");
+// import morgan from "morgan" -------ES6 style of writing
+const morgan = require("morgan");
+// import bodyParser from "body-parser" -------ES6 style of writing
+const bodyParser = require("body-parser");
+
+// app.use("/users", userRouter);
+
+//configuring body parser (accepts body value from body and parses it into given JSON format like JSOn)
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+//configuring morgan (logger)
+app.use(morgan("dev"));
 
 app.use("/users", userRouter);
 
@@ -50,4 +64,5 @@ app.use("/users", userRouter);
 //   res.json({ message: "This page is another middleware" }); //middleware part:this is url part matches with the path mentioned in url i.e /
 // });  //on frontend this will work on localhost:4000/Vedansh
 
+// export default app -------ES6 style of writing
 module.exports = app;
