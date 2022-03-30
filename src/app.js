@@ -49,6 +49,7 @@ const bodyParser = require("body-parser");
 
 // import cors
 const cors = require("cors");
+const res = require("express/lib/response");
 
 // app.use("/users", userRouter);
 
@@ -61,6 +62,10 @@ app.use(morgan("dev"));
 
 // configuring cors
 app.use(cors());
+
+app.get("/", (req, res, next) => {
+  res.json({ message: `This works` });
+});
 
 //Using User route--this is done after importing and configuring
 app.use("/users", userRouter);
