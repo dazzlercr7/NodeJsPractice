@@ -19,12 +19,36 @@
 const express = require("express"); //returns an handler function in variable
 //import express from "express" -------ES6 style of writing
 const app = express(); //executing handler function
-// import userRouter from "../api/routes/user.js" -------ES6 style of writing
+
+const dotenv = require("dotenv");
+dotenv.config();
+
+const mongoose = require("mongoose");
+const dbUrl = `${process.env.DB_URL}`;
+
+//this is a promise
+mongoose
+  .connect(dbUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("MongoDb IS connected 🔥🔥🔥"))
+  .catch((err) => console.log(err));
+
+// import userRouter from "../api/routes/user.js" -------ES6 style of writing and importing user router
 const userRouter = require("../api/routes/user.js");
+
+const orderRouter = require("../api/routes/order.js");
+
+const productRouter = require("../api/routes/products.js");
+
 // import morgan from "morgan" -------ES6 style of writing
 const morgan = require("morgan");
 // import bodyParser from "body-parser" -------ES6 style of writing
 const bodyParser = require("body-parser");
+
+// import cors
+const cors = require("cors");
 
 // app.use("/users", userRouter);
 
@@ -35,7 +59,15 @@ app.use(bodyParser.json());
 //configuring morgan (logger)
 app.use(morgan("dev"));
 
+// configuring cors
+app.use(cors());
+
+//Using User route--this is done after importing and configuring
 app.use("/users", userRouter);
+
+app.use("/order", orderRouter);
+
+app.use("/product", productRouter);
 
 // app.use(
 //   (req, res, next) => {
@@ -66,3 +98,11 @@ app.use("/users", userRouter);
 
 // export default app -------ES6 style of writing
 module.exports = app;
+
+// const tstFunction = async () => {
+//   try {
+//     let result = await mongoose.connect();
+//   } catch (error) {
+//     throw error;
+//   }
+// };
