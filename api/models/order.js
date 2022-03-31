@@ -3,12 +3,10 @@ const mongoose = require("mongoose");
 
 const order_schema = mongoose.Schema({
   __id: mongoose.Schema.Types.ObjectId,
-  oder_Name: {
+  order_Name: {
     type: String,
     required: true,
   },
-  products: { type: String },
-
   address: {
     type: String,
     required: true,
