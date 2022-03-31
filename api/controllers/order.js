@@ -1,17 +1,19 @@
 const Order = require("../models/order.js");
 const mongoose = require("mongoose");
 
-const create_new_orders = (res, req, next) => {
-  const neworder = new Order({
+const create_new_orders = (req, res, next) => {
+  const nworder = new Order({
     _id: new mongoose.Types.ObjectId(),
-    order_Name: req.body.first_name,
+    order_Name: req.body.order_Name,
     products: req.body.products,
     address: req.body.address,
     userName: req.body.userName,
   });
-  neworder
+
+  nworder
     .save()
     .then((ordercreate) => {
+      console.log("We have reached here");
       console.log(ordercreate);
       res.status(200).json({
         message: "Order is created",
@@ -19,25 +21,28 @@ const create_new_orders = (res, req, next) => {
       });
     })
     .catch((err) =>
-      res.status(500).json({ message: "There is an error", error })
+      res.status(500).json({ message: "There is an error", err })
     );
 };
 
-const get_all_orders = (res, req, next) => {
+const get_all_orders = (req, res, next) => {
   Order.find()
     .exec()
-    .then((allorder) => {
+    .then((alorder) => {
+      console.log("This is the result from get all orders");
+      console.log(alorder);
       res.status(200).json({
+        count: alorder.length,
         message: "All orders are listed:",
-        allorder,
+        alorder,
       });
     })
     .catch((err) =>
-      res.status(500).json({ message: "There is an error", error })
+      res.status(500).json({ message: "There is an error", err })
     );
 };
 
-const get_single_order = (res, req, next) => {
+const get_single_order = (req, res, next) => {
   Order.find({ orderid: req.params.orderid })
     .exec()
     .then((order) => {
@@ -48,18 +53,18 @@ const get_single_order = (res, req, next) => {
       });
     })
     .catch((err) =>
-      res.status(500).json({ message: "There is an error", error })
+      res.status(500).json({ message: "There is an error", err })
     );
 };
 
-const update_single_order = (res, req, next) => {
+const update_single_order = (req, res, nextt) => {
   const updateOps = {};
   const id = req.params.orderid;
   for (const [key, value] of Object.entries(req.body)) {
     updateOps[key] = value;
   }
 
-  Order.patch({ _id: id }, { $set: updateOps })
+  Order.update({ _id: id }, { $set: updateOps })
     .exec()
     .then((output) => {
       res.status(200).json({
@@ -68,12 +73,12 @@ const update_single_order = (res, req, next) => {
       });
     })
     .catch((err) =>
-      res.status(500).json({ message: "There is an error", error })
+      res.status(500).json({ message: "There is an error", err })
     );
 };
 
-const delete_single_order = (res, req, next) => {
-  Order.delete({ orderid: req.params.orderid })
+const delete_single_order = (req, res, next) => {
+  Order.remove({ _id: req.params.orderid })
     .exec()
     .then((order) => {
       res.status(200).json({
@@ -81,7 +86,7 @@ const delete_single_order = (res, req, next) => {
       });
     })
     .catch((err) =>
-      res.status(500).json({ message: "There is an error", error })
+      res.status(500).json({ message: "There is an error", err })
     );
 };
 
